@@ -208,8 +208,9 @@ func (p Partition) Regions() map[string]Region {
 	rs := map[string]Region{}
 	for id := range p.p.Regions {
 		rs[id] = Region{
-			id: id,
-			p:  p.p,
+			id:   id,
+			p:    p.p,
+			desc: p.p.Regions[id].Description,
 		}
 	}
 
@@ -238,7 +239,8 @@ type Region struct {
 }
 
 // ID returns the region's identifier.
-func (r Region) ID() string { return r.id }
+func (r Region) ID() string          { return r.id }
+func (r Region) Description() string { return r.desc }
 
 // ResolveEndpoint resolves an endpoint from the context of the region given
 // a service. See Partition.EndpointFor for usage and errors that can be returned.
@@ -286,8 +288,9 @@ func (s Service) Regions() map[string]Region {
 	for id := range s.p.Services[s.id].Endpoints {
 		if _, ok := s.p.Regions[id]; ok {
 			rs[id] = Region{
-				id: id,
-				p:  s.p,
+				id:   id,
+				p:    s.p,
+				desc: s.p.Regions[id].Description,
 			}
 		}
 	}
